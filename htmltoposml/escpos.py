@@ -311,12 +311,12 @@ class Escpos:
             """ absolute position """
             posL = int(posL) & 255
             posH = int(posL) & 255
-            print "absolute "+str(posL)+" "+str(posH)
+#            print "absolute "+str(posL)+" "+str(posH)
             self._raw(TXT_SET_APOS,self.num(posL),self.num(posH))
         else:
             posL = int(posL) & 255
             posH = int(posH) & 255
-            print "relative "+str(posL)+" "+str(posH)
+#            print "relative "+str(posL)+" "+str(posH)
             self._raw(TXT_SET_RPOS,self.num(posL),self.num(posH))
         # Set left margin
         self._raw(TXT_LMARGIN,self.num(lmarginL),self.num(lmarginH))
