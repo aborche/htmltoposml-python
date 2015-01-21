@@ -343,7 +343,7 @@ class Escpos:
         else:
             pass
         
-    def printlogo(self,logo=1,xH=0,xL=0,yH=0,yL=0):
+    def printlogos(self,logo=1,xH=0,xL=0,yH=0,yL=0):
         """ print logo from flash bank """
         if logo == 1:
             self._raw(P_LOGO1_PART,self.num(xH),self.num(xL),self.num(yH),self.num(yL))
