@@ -62,7 +62,7 @@ TXT_SIZE_DEFAULT = '\x1d\x21\x00' # Reset character size
 
 TXT_SIZE_CUSTOM  = '\x1d\x21'	# Custom character size
 # Bits 0 to 3 - select character size height
-# Bits 4 to 7 - select character size witdh
+# Bits 4 to 7 - select character size width
 # 1 - x2 (10,01)
 # 2 - x3 (20,02)
 # 3 - x4 (30,03)

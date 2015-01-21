@@ -1,7 +1,7 @@
 #!/usr/bin/python
 """
-@original code: Manuel F Martinez <manpaz@bashlinux.com>
 @author: Kaltashkin Eugene <zhecka@gmail.com>
+@original code: Manuel F Martinez <manpaz@bashlinux.com>
 @license: BSD
 """
 
