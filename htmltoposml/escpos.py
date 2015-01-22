@@ -33,114 +33,114 @@ class Escpos:
         else:
             raise CharCode_error()
 
-    def barcode(self, code, bc, width='3', height='162', pos='OFF', font='A'):
-        # "1234567","CODE128FSA",162,3,"BELOW","A"
+    def barcodeprint(self):#, *codestruct):
         """ Print Barcode """
         # Align Bar Code()
         self._raw(TXT_ALIGN_CT)
+        #
         # Height
-        if height >=2 or height <=6:
-            self._raw(BARCODE_HEIGHT,self.num(height))
+        if self.barcodestruct['HEIGHT'] >=2 or self.barcodestruct['HEIGHT'] <=6:
+            self._raw(BARCODE_HEIGHT,self.num(self.barcodestruct['HEIGHT']))
         else:
-            raise BarcodeSizeError()
+            self._raw(BARCODE_HEIGHT,self.num(3))
         # Width
-        if width >= 1 or width <=255:
-            self._raw(BARCODE_WIDTH,self.num(width))
-#            self._raw("".join([BARCODE_WIDTH,self.num(width)]))
+        if self.barcodestruct['WIDTH'] >= 1 or self.barcodestruct['WIDTH'] <=255:
+            self._raw(BARCODE_WIDTH,self.num(self.barcodestruct['WIDTH']))
         else:
-            raise BarcodeSizeError()
+            self._raw(BARCODE_WIDTH,self.num(162))
         # Font
-        if font.upper() == "B":
+        if self.barcodestruct['FONT'].upper() == "B":
             self._raw(BARCODE_FONT_B)
         else: # DEFAULT FONT: A
             self._raw(BARCODE_FONT_A)
         # Position
-        if pos.upper() == "OFF":
+        if self.barcodestruct['POS'].upper() == "OFF":
             self._raw(BARCODE_TXT_OFF)
-        elif pos.upper() == "BOTH":
+        elif self.barcodestruct['POS'].upper() == "BOTH":
             self._raw(BARCODE_TXT_BTH)
-        elif pos.upper() == "ABOVE":
+        elif self.barcodestruct['POS'].upper() == "ABOVE":
             self._raw(BARCODE_TXT_ABV)
         else:  # DEFAULT POSITION: BELOW 
             self._raw(BARCODE_TXT_BLW)
         # Type 
-        if bc.upper() == "UPC-A":
-            self.barcodecheck(code,'numberals')
-            if len(code) >= 11 and len(code) <= 12:
+        barcodelen=len(self.barcodestruct['TEXT'])
+        if self.barcodestruct['CODE'].upper() == "UPC-A":
+            self.barcodecheck(self.barcodestruct['TEXT'],'numberals')
+            if barcodelen >= 11 and barcodelen <= 12:
                 self._raw(BARCODE_UPC_A)
             else:
                 raise BarcodeLenError('11-12')
-        elif bc.upper() == "UPC-E":
-            self.barcodecheck(code,'numberals')
-            if len(code) >= 11 and len(code) <= 12:
+        elif self.barcodestruct['CODE'].upper() == "UPC-E":
+            self.barcodecheck(self.barcodestruct['TEXT'],'numberals')
+            if barcodelen >= 11 and barcodelen <= 12:
                 self._raw(BARCODE_UPC_E)
             else:
                 raise BarcodeLenError('11-12')
-        elif bc.upper() == "EAN13":
-            self.barcodecheck(code,'numberals')
-            if len(code) >= 12 and len(code) <= 13:
+        elif self.barcodestruct['CODE'].upper() == "EAN13":
+            self.barcodecheck(self.barcodestruct['TEXT'],'numberals')
+            if barcodelen >= 12 and barcodelen <= 13:
                 self._raw(BARCODE_EAN13)
             else:
                 raise BarcodeLenError('12-13')
-        elif bc.upper() == "EAN8":
-            self.barcodecheck(code,'numberals')
-            if len(code) >= 7 and len(code) <= 8:
+        elif self.barcodestruct['CODE'].upper() == "EAN8":
+            self.barcodecheck(self.barcodestruct['TEXT'],'numberals')
+            if barcodelen >= 7 and barcodelen <= 8:
                 self._raw(BARCODE_EAN8)
             else:
                 raise BarcodeLenError('7-8')
-        elif bc.upper() == "CODE39":
-            self.barcodecheck(code,'code39')
-            if len(code) >= 1:
+        elif self.barcodestruct['CODE'].upper() == "CODE39":
+            self.barcodecheck(self.barcodestruct['TEXT'],'code39')
+            if barcodelen >= 1:
                 self._raw(BARCODE_CODE39)
             else:
                 raise BarcodeLenError('1+')
-        elif bc.upper() == "ITF":
-            self.barcodecheck(code,'numberals')
-            if not len(code) & 1 :
+        elif self.barcodestruct['CODE'].upper() == "ITF":
+            self.barcodecheck(self.barcodestruct['TEXT'],'numberals')
+            if not barcodelen & 1 :
                 self._raw(BARCODE_ITF)
             else:
                 raise BarcodeLenError('even')
-        elif bc.upper() == "CODABAR":
-            self.barcodecheck(code,'codabar')
-            if len(code) >= 1:
+        elif self.barcodestruct['CODE'].upper() == "CODABAR":
+            self.barcodecheck(self.barcodestruct['TEXT'],'codabar')
+            if barcodelen >= 1:
                 self._raw(BARCODE_CODABAR)
             else:
                 raise BarcodeLenError('1+')
-        elif bc.upper() == "CODE93":
-            self.barcodecheck(code,'latin1')
-            if len(code) >= 1 and len(code) <= 255:
+        elif self.barcodestruct['CODE'].upper() == "CODE93":
+            self.barcodecheck(self.barcodestruct['TEXT'],'latin1')
+            if barcodelen >= 1 and barcodelen <= 255:
                 self._raw(BARCODE_CODE93)
             else:
                 raise BarcodeLenError('from 1 to 255')
-        elif bc.upper() == "CODE32":
-            self.barcodecheck(code,'numberals')
-            if len(code) >= 8 and len(code) <= 9:
+        elif self.barcodestruct['CODE'].upper() == "CODE32":
+            self.barcodecheck(self.barcodestruct['TEXT'],'numberals')
+            if barcodelen >= 8 and barcodelen <= 9:
                 self._raw(BARCODE_CODE32)
             else:
                 raise BarcodeLenError('8-9')
-        elif bc.upper() == "CODE128FSA":
-            self.barcodecheck(code,'latin1')
-            if len(code) >= 1 and len(code) <= 255:
+        elif self.barcodestruct['CODE'].upper() == "CODE128FSA":
+            self.barcodecheck(self.barcodestruct['TEXT'],'latin1')
+            if barcodelen >= 1 and barcodelen <= 255:
                 self._raw(BARCODE_CODE128FSA)
             else:
                 raise BarcodeLenError('from 2 to 255')
-        elif bc.upper() == "CODE128FSB":
-            self.barcodecheck(code,'latin1')
-            if len(code) >= 1 and len(code) <= 255:
+        elif self.barcodestruct['CODE'].upper() == "CODE128FSB":
+            self.barcodecheck(self.barcodestruct['TEXT'],'latin1')
+            if barcodelen >= 1 and barcodelen <= 255:
                 self._raw(BARCODE_CODE128FSB)
             else:
                 raise BarcodeLenError('from 2 to 255')
-        elif bc.upper() == "CODE128FSC":
-            self.barcodecheck(code,'latin1')
-            if len(code) >= 1 and len(code) <= 255:
+        elif self.barcodestruct['CODE'].upper() == "CODE128FSC":
+            self.barcodecheck(self.barcodestruct['TEXT'],'latin1')
+            if barcodelen >= 1 and barcodelen <= 255:
                 self._raw(BARCODE_CODE128FSC)
             else:
                 raise BarcodeLenError('from 2 to 255')
         else:
             raise BarcodeTypeError()
         # Print Code
-        if code:
-            self._raw(code,NUL)
+        if self.barcodestruct['TEXT'] != '':
+            self._raw(self.barcodestruct['TEXT'],NUL)
         else:
             raise exception.BarcodeCodeError()
 
