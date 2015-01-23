@@ -103,6 +103,9 @@ class HTMLtoPOS(HTMLParser):
             print 'self.barcodestruct',self.barcodestruct
             self.barcodeprint()
         elif tag == 'LOGO':
+            BANK=1
+            START=0
+            LENGTH=240
             for pair in attrs:
                 (NAME,VALUE) = (pair[0].upper(),pair[1].upper())
                 if NAME == 'START':
