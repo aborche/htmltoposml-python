@@ -46,8 +46,9 @@ class HTMLtoPOS(HTMLParser):
                 elif NAME == 'ALIGN':
                     self._raw(TXT_ALIGN[VALUE])
                 elif NAME == 'HT':
+                    print "HT FOUND! ",VALUE
                     self._raw(TXT_SET_HT)
-                    if VALUE == '0':
+                    if VALUE == 0:
                         self._raw(NUL)
                     else:
                         for count in range (1,9):
