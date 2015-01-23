@@ -1,8 +1,68 @@
 Project in deep development!!!
 Some documentation not exist.
-See source code and example.py for info
 
-Run example.py for get democode
+1. Dependencies
+
+In order to start getting access to your printer, you must ensure
+you have previously installed the following python modules:
+
+  * pyusb (python-usb)
+  * PIL (Python Image Library)
+
+See example.py and source code for info
+
+2. How to find your printer
+
+Before start create your Python ESC/POS printer instance, you must
+see at your system for the printer parameters. This is done with
+the 'lsusb' command.
+
+First run the command to look for the "Vendor ID" and "Product ID",
+then write down the values, these values are displayed just before
+the name of the device with the following format:
+
+xxxx:xxxx
+
+Example:
+Bus 002 Device 001: ID 1a2b:1a2b Device name
+
+Write down the the values in question, then issue the following
+command so you can get the "Interface" number and "End Point"
+
+lsusb -vvv -d xxxx:xxxx | grep iInterface
+lsusb -vvv -d xxxx:xxxx | grep bEndpointAddress | grep OUT
+
+The first command will yields the "Interface" number that must
+be handy to have and the second yields the "Output Endpoint"
+address.
+
+By default the "Interface" number is "0" and the "Output Endpoint"
+address is "0x82", if you have other values then you can define
+with your instance.
+
+For printing data on printer just add your account to "lp" group and
+re-login.
+
+--------------------- This text from escpos-python -------------------
+On Linux, ensure you belongs to the proper group so you can have access to
+the printer.
+This can be done, by adding yourself to 'dialout' group, this might require
+to re-login so the changes make effect.
+
+Then, add the following rule to /etc/udev/rules.d/99-escpos.rules
+SUBSYSTEM=="usb", ATTRS{idVendor}=="04b8", ATTRS{idProduct}=="0202", MODE="0664", GROUP="dialout"
+
+and restart udev rules.
+# sudo service udev restart
+--------------------- This text from escpos-python -------------------
+
+------------------------------------------------------------------
+
+3. Run example.py for get democode
+
+4. Edit and run democode file. Run `cat 'test.file' > /dev/usb/<usb printer address>`
+
+5. Enjoy
 
 If you have a questions - mail me to <zhecka@gmail.com>
 
