@@ -20,8 +20,8 @@ class FilePOS(File,HTMLtoPOS):
                 HTMLtoPOS.__init__(self)
                 File.__init__(self, **kwargs)
 
-Custom=UsbPOS(idVendor=0x0dd4,idProduct=0x015d,interface=0,in_ep=0x81,out_ep=0x02)
-#Custom=FilePOS(devfile="test.file")
+#Custom=UsbPOS(idVendor=0x0dd4,idProduct=0x015d,interface=0,in_ep=0x81,out_ep=0x02)
+Custom=FilePOS(devfile="test.file")
 
 welcome_text = u"""
 <posml>
