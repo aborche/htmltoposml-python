@@ -99,10 +99,21 @@ class HTMLtoPOS(HTMLParser):
             for pair in attrs:
                 (NAME,VALUE) = (pair[0].upper(),pair[1].upper())
                 self.barcodestruct[NAME]=VALUE
-            print self.barcodestruct
-            self.barcodeprint() #self, self.barcodestruct)
-#                print "NAME=",NAME," VALUE=",VALUE
-            pass
+            print 'self.barcodestruct',self.barcodestruct
+            self.barcodeprint()
+        elif tag == 'LOGO':
+            for pair in attrs:
+                (NAME,VALUE) = (pair[0].upper(),pair[1].upper())
+                if NAME == 'START':
+                    START=pack('>h', int(VALUE))
+                elif NAME == 'LENGTH':
+                    LENGTH=pack('>h', int(VALUE))
+                elif NAME == 'BANK':
+                    BANK = int(VALUE)
+            if BANK == 2:
+                self._raw(P_LOGO2_PART,START,LENGTH)
+            else:
+                self._raw(P_LOGO1_PART,START,LENGTH)
         else:
             pass
 

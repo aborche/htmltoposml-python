@@ -84,6 +84,8 @@ Text format tags with multiple attributes:
                 # set internal font for print text
                 SIZE=0x00 # hex value
                 # see TEXT SIZE command
+
+Special functions:
         BARCODE - print specified type of barcode
                 TYPE=str  # barcode type
                 # UPC-A, UPC-E, EAN13, EAN8, CODE39, ITF, CODABAR, CODE93, CODE32
@@ -95,6 +97,10 @@ Text format tags with multiple attributes:
                 FONT=str  # A or B (font for barcode text)
                 HEIGHT=n  # height of barcode. default: 162
                 WIDTH=n   # width of barcode (2-6). default: 3
+        LOGO - print logo from internal flash
+                BANK=n # logo bank number
+                START=n # start line in logo bitmap
+                LENGTH=n # number of lines which need to be printed
 </posml>
 """
 object_method= u"""
@@ -175,9 +181,10 @@ Custom.text("some text")
 
 Custom.printlogo()
         logo=1|2: select flash logo
+        start=n : start line in logo bitmap
+        length=n: number of lines which need to be printed
         
 Custom.image('image filename')
-
 """
 
 txtdemopos = """
@@ -195,12 +202,15 @@ class FilePOS(File,HTMLtoPOS):
         def __init__(self, **kwargs):
                 HTMLtoPOS.__init__(self)
                 File.__init__(self, **kwargs)
+                self.barcodestruct=BARCODESTRUCT
 
 Custom=FilePOS(devfile="test.file")
 
 str='''<font size=0x22><center>Test Page</center></font>
 <tab><b>This is a test message printed
 from htmltopos python library.</b>
+<LOGO BANK=1 START=0 LENGTH=240>
+<BARCODE CODE='CODE128FSB' TEXT="HTMLtoPosML" POS="BOTH">
 '''
 
 Custom.hw('INIT')
@@ -228,14 +238,13 @@ class FilePOS(File,HTMLtoPOS):
         def __init__(self, **kwargs):
                 HTMLtoPOS.__init__(self)
                 File.__init__(self, **kwargs)
+                self.barcodestruct=BARCODESTRUCT
 
 Custom=FilePOS(devfile="test.file")
 
 Custom.hw('INIT')
 Custom.cut('TOTAL')
 Custom.paper('OUT')
-
-Custom.txtattr(set='reset')
 Custom.txtattr(align="center",size='10')
 Custom.text('HTMLtoPosML demo')
 Custom.control('LF')
@@ -243,12 +252,16 @@ Custom.txtattr(size='12',bold="on")
 Custom.text('Bold text with custom size')
 Custom.control('LF')
 Custom.txtattr(size='11',bold="off",font="B",align='left')
-Custom.set(lmarginL=90)
+Custom.set(lmargin=90)
 Custom.text('Left margin=90, Bold off, Font B')
 Custom.control('LF')
 Custom.txtattr(set='reset')
 Custom.text('Just simple text with default settings')
 Custom.control('LF')
+Custom.printlogo(logo=1,start=0,length=250)
+Custom.barcodestruct['CODE']='CODE128FSA'
+Custom.barcodestruct['TEXT']='CODE128FSA'
+Custom.barcodeprint()
 Custom.text('\\n\\n\\n\\n\\n\\n')
 Custom.cut('TOTAL')
 Custom.paper('OUT')
