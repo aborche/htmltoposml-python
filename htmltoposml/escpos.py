@@ -9,6 +9,7 @@ import time
 
 from constants import *
 from exceptions import *
+from struct import pack
 
 try:
     import Image
@@ -280,7 +281,7 @@ class Escpos:
                 else:
                     self._raw(TXT_ROTATE_OFF)
 
-    def set(self, density=6, tabpos=8, ptype='rel', posL=0, posH=0, lmarginL=0, lmarginH=0, pwidthH=2, pwidthL=64):
+    def set(self, density=6, tabpos=8, ptype='rel', pos=0, lmargin=0, pwidth=576):
         """ Set text properties """
         # Density
         if density == 0:
@@ -311,21 +312,17 @@ class Escpos:
             for count in range (1,16):
                 self._raw(self.num(int(tabpos)*count))
             self._raw(NUL)
-        # Set relative position
+        # Set position
         if ptype == 'abs':
             """ absolute position """
-            posL = int(posL) & 255
-            posH = int(posL) & 255
-#            print "absolute "+str(posL)+" "+str(posH)
-            self._raw(TXT_SET_APOS,self.num(posL),self.num(posH))
+            self._raw(TXT_SET_APOS,pack('<h',int(pos)))
         else:
-            posL = int(posL) & 255
-            posH = int(posH) & 255
-#            print "relative "+str(posL)+" "+str(posH)
-            self._raw(TXT_SET_RPOS,self.num(posL),self.num(posH))
+            """ absolute position """
+            self._raw(TXT_SET_RPOS,pack('<h',int(pos)))
         # Set left margin
-        self._raw(TXT_LMARGIN,self.num(lmarginL),self.num(lmarginH))
-        self._raw(TXT_PWIDTH,self.num(pwidthL),self.num(pwidthH))
+        self._raw(TXT_LMARGIN,pack('<h', int(lmargin)))
+         #self.num(lmarginL),self.num(lmarginH))
+        self._raw(TXT_PWIDTH,pack('<h', int(pwidth)))
         
 
     def cut(self, mode='', feed=5):
@@ -348,12 +345,16 @@ class Escpos:
         else:
             pass
         
-    def printlogos(self,logo=1,xH=0,xL=0,yH=0,yL=0):
+    def printlogo(self,logo=1,start=0,length=240): #xH=0,xL=0,yH=0,yL=0):
         """ print logo from flash bank """
+        START=pack('>h', int(start))
+        LENGTH=pack('>h', int(length))
         if logo == 1:
-            self._raw(P_LOGO1_PART,self.num(xH),self.num(xL),self.num(yH),self.num(yL))
+            self._raw(P_LOGO1_PART,START,LENGTH)
+            #self.num(xH),self.num(xL),self.num(yH),self.num(yL))
         elif logo == 2:
-            self._raw(P_LOGO2_PART,self.num(xH),self.num(xL),self.num(yH),self.num(yL))
+            self._raw(P_LOGO2_PART,START,LENGTH)
+            #self.num(xH),self.num(xL),self.num(yH),self.num(yL))
         else:
             pass
 
@@ -418,6 +419,7 @@ class Escpos:
         cont = 0
         buffer = ""
        
+#        self._raw(S_RASTER_2W)
         self._raw(S_RASTER_N)
         buffer = "%02X%02X%02X%02X" % (((size[0]/size[1])/8), 0, size[1], 0)
         self._raw(buffer.decode('hex'))

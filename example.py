@@ -20,8 +20,8 @@ class FilePOS(File,HTMLtoPOS):
                 HTMLtoPOS.__init__(self)
                 File.__init__(self, **kwargs)
 
-#Custom=UsbPOS(idVendor=0x0dd4,idProduct=0x015d,interface=0,in_ep=0x81,out_ep=0x02)
-Custom=FilePOS(devfile="test.file")
+Custom=UsbPOS(idVendor=0x0dd4,idProduct=0x015d,interface=0,in_ep=0x81,out_ep=0x02)
+#Custom=FilePOS(devfile="test.file")
 
 welcome_text = u"""
 <posml>
@@ -75,6 +75,9 @@ Text format tags with multiple attributes:
                 # 1 <= n <= 255 (default:64 = 1/6 inch)
                 LMARGIN=n # decimal value
                 # Set left margin
+                # 1 <= n <= 862
+                PWIDTH=n # decimal value
+                # Set print width
                 # 1 <= n <= 862
         FONT - change font for text
                 FACE=str # A or B
@@ -152,17 +155,29 @@ Custom.charcode()
         "SPACE":
 
 Custom.barcode()
-        font="A|B": set barcode text font
-        pos="off|above|below|both": barcode text position
-        width='n': barcode width(default:3)
-        height='n': barcode height(default:162)
-        code='barcodetext': Barcode string
-        bc="UPC-A|UPC-E|EAN13|EAN8|CODE39|ITF|CODABAR|CODE93|CODE32|CODE128FSA|CODE128FSB|CODE128FSC": barcode type
+        # redefine barcode struct!
+        # Custom.barcodestruct['TEXT']="TEXT"
+        # Custom.barcodestruct['CODE']="BARCODETYPE"
+        # Custom.barcodestruct['WIDTH']=3
+        # Custom.barcodestruct['HEIGHT']=162
+        # Custom.barcodestruct['FONT']='A'
+        # Custom.barcodestruct['POS']='ABOVE'
+        # For Reset barcodestruct
+        # Custom.barcodestruct = BARCODESTRUCT
+        FONT='A|B': set barcode text font
+        POS="OFF|ABOVE|BELOW|BOTH": barcode text position
+        WIDTH=n: barcode width(default:3)
+        HEIGHT=n: barcode height(default:162)
+        TEXT='barcodetext': Barcode string
+        CODE="UPC-A|UPC-E|EAN13|EAN8|CODE39|ITF|CODABAR|CODE93|CODE32|CODE128FSA|CODE128FSB|CODE128FSC": barcode type
 
 Custom.text("some text")
 
 Custom.printlogo()
         logo=1|2: select flash logo
+        
+Custom.image('image filename')
+
 """
 
 txtdemopos = """

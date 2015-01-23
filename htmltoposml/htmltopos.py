@@ -87,14 +87,19 @@ class HTMLtoPOS(HTMLParser):
                     if VALUE != '':
                         self._raw(TXT_LMARGIN)
                         self._raw(pack('<h', int(VALUE)))
+                elif NAME == 'PWIDTH':
+                    if VALUE != '':
+                        self._raw(TXT_PWIDTH)
+                        self._raw(pack('<h', int(VALUE)))
                 else:
                     pass
         elif tag == 'BARCODE':
-            self.barcodestruct = BARCODESTRUCT
+#            self.barcodestruct = BARCODESTRUCT
             #{ 'WIDTH': 3, 'HEIGHT': 162, 'FONT': 'A', 'POS': 'ABOVE' }
             for pair in attrs:
                 (NAME,VALUE) = (pair[0].upper(),pair[1].upper())
                 self.barcodestruct[NAME]=VALUE
+            print self.barcodestruct
             self.barcodeprint() #self, self.barcodestruct)
 #                print "NAME=",NAME," VALUE=",VALUE
             pass

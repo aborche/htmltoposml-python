@@ -138,10 +138,10 @@ P_LOGO1_PART = '\x1b\xfa\x01'	 # Print logo 1
 P_LOGO2_PART = '\x1b\xfa\x02'	 # Print logo 2
 
 # Image format  
-#S_RASTER_N      = '\x1d\x76\x30\x00' # Set raster image normal size
-#S_RASTER_2W     = '\x1d\x76\x30\x01' # Set raster image double width
-#S_RASTER_2H     = '\x1d\x76\x30\x02' # Set raster image double height
-#S_RASTER_Q      = '\x1d\x76\x30\x03' # Set raster image quadruple
+S_RASTER_N      = '\x1d\x76\x30\x00' # Set raster image normal size
+S_RASTER_2W     = '\x1d\x76\x30\x01' # Set raster image double width
+S_RASTER_2H     = '\x1d\x76\x30\x02' # Set raster image double height
+S_RASTER_Q      = '\x1d\x76\x30\x03' # Set raster image quadruple
 
 # Printing Density
 PD_N50          = '\x1d\x7c\x00' # Printing Density -50%
