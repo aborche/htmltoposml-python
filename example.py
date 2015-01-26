@@ -62,6 +62,9 @@ Text format tags with multiple attributes:
                 ALIGN=str # string
                 # Set text align (LEFT,RIGHT,CENTER)
                 # Notice! Align command insert LineFeed symbol before text!
+                ALIGNLF=str # string
+                # ON = add LF before!!! align text(Default is ON)
+                # OFF = turn off LF before align text
                 HT=n # decimal value
                 # Set horisontal tab sequence positions
                 # Make a table for each next tab element to n position.

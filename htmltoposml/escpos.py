@@ -204,10 +204,16 @@ class Escpos:
             # change defined attributes
             # Align
             if align.upper() == "CENTER":
+                if self.txt['ALIGNLF'] == 'ON':
+                    self._raw(CTL_LF)
                 self._raw(TXT_ALIGN_CT)
             elif align.upper() == "RIGHT":
+                if self.txt['ALIGNLF'] == 'ON':
+                    self._raw(CTL_LF)
                 self._raw(TXT_ALIGN_RT)
             elif align.upper() == "LEFT":
+                if self.txt['ALIGNLF'] == 'ON':
+                    self._raw(CTL_LF)
                 self._raw(TXT_ALIGN_LT)
             # Change font
             if font.upper() != "UNDEF":

@@ -1,5 +1,13 @@
 """ ESC/POS Commands (Constants) """
 """  Corrected to Custom VPK-80  """
+# Calculate motion units
+# HMU=1/x (in), VMU=1/y
+# HMU=25.4/x (mm), VMU=25.4/y (mm)
+# HMU=0,1245 mm, VMU=0,06225 mm
+# HMU=0,0049 in, VMU=0,0024 in
+# VKP80ii - x=204, y=408
+# Printing Area max = 576, if PAM=0 -> MAX
+# left margin = PAM*HMU
 
 # Feed control sequences
 CTL_LF     = '\x0a'              # Print and line feed
@@ -50,9 +58,9 @@ TXT_FONT       	 = '\x1b\x4d'	  # Font select
 TXT_FONT_A       = '\x1b\x4d\x00' # Font type A
 TXT_FONT_B       = '\x1b\x4d\x01' # Font type B
 
-TXT_ALIGN_LT     = '\x0a\x1b\x61\x00' # Left justification
-TXT_ALIGN_CT     = '\x0a\x1b\x61\x01' # Centering
-TXT_ALIGN_RT     = '\x0a\x1b\x61\x02' # Right justification
+TXT_ALIGN_LT     = '\x1b\x61\x00' # Left justification
+TXT_ALIGN_CT     = '\x1b\x61\x01' # Centering
+TXT_ALIGN_RT     = '\x1b\x61\x02' # Right justification
 
 TXT_CPI_MODE0	 = '\x1b\xc1\x00'	 # Set/cancel cpi mode. Font A = 11 cpi, Font B = 15 cpi
 TXT_CPI_MODE1	 = '\x1b\xc1\x01'	 # Set/cancel cpi mode. Font A = 15 cpi, Font B = 20 cpi
@@ -314,3 +322,6 @@ BARCODE_FONT = { 'A': BARCODE_FONT_A, 'B': BARCODE_FONT_B }
 BARCODE_TYPE = { 'UPC-A': BARCODE_UPC_A, 'UPC-E': BARCODE_UPC_E, 'EAN13': BARCODE_EAN13, 'EAN8': BARCODE_EAN8, 'CODE39': BARCODE_CODE39, 'ITF': BARCODE_ITF, 'CODABAR': BARCODE_CODABAR, \
                  'CODE93': BARCODE_CODE93, 'CODE32': BARCODE_CODE32, 'CODE128FSA': BARCODE_CODE128FSA, 'CODE128FSB': BARCODE_CODE128FSB, 'CODE128FSC': BARCODE_CODE128FSC }
 BARCODESTRUCT = { 'WIDTH': 3, 'HEIGHT': 162, 'FONT': 'A', 'POS': 'BELOW' }
+TXT_DEFAULTS  = { 'FONT': 'A', 'SIZE': '0x00', 'CPI': '1', 'ALIGN': 'LEFT', 'HT': 8, 'PD': 6, 'LS': '1_6',\
+                  'LMARGIN': 0, 'PWIDTH': 576, 'ALIGNLF': 'ON' }
+

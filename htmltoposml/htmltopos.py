@@ -5,6 +5,8 @@ from struct import pack
 
 class HTMLtoPOS(HTMLParser):
     def __init__(self):
+        self.txt = TXT_DEFAULTS
+        print self.txt
         self.reset()
 
     def handle_starttag(self, tag, attrs):
@@ -18,10 +20,13 @@ class HTMLtoPOS(HTMLParser):
                 (NAME,VALUE) = (pair[0].upper(),pair[1].upper())
                 if NAME == 'FACE':
                     if VALUE == 'B':
+                        self.txt['FONT']=VALUE
                         self._raw(TXT_FONT_B)
                     else:
+                        self.txt['FONT']=VALUE
                         self._raw(TXT_FONT_A)
                 elif NAME == 'SIZE':
+                        self.txt['SIZE']=VALUE
                         self._raw(TXT_SIZE_CUSTOM)
                         self._raw(chr(int(VALUE,16)))
                 else:
@@ -31,10 +36,17 @@ class HTMLtoPOS(HTMLParser):
             for pair in attrs:
                 (NAME,VALUE) = (pair[0].upper(),pair[1].upper())
                 if NAME == 'SIZE':
+                    self.txt['SIZE']=VALUE
                     self._raw(TXT_SIZE_CUSTOM)
                     self._raw(chr(int(VALUE,16)))
+                elif NAME == 'ALIGNLF':
+                    if VALUE == 'OFF':
+                        self.txt['ALIGNLF'] = 'OFF'
+                    else:
+                        self.txt['ALIGNLF'] = 'ON'
                 elif NAME == 'CPI':
                     print "CPI ",VALUE
+                    self.txt['CPI']=VALUE
                     if VALUE == '0':
                         self._raw(TXT_CPI_MODE0)
                     elif VALUE == '1':
@@ -44,6 +56,9 @@ class HTMLtoPOS(HTMLParser):
                     else:
                         self._raw(TXT_CPI_MODE1)
                 elif NAME == 'ALIGN':
+                    self.txt['ALIGN']=VALUE
+                    if self.txt['ALIGNLF'] == 'ON':
+                        self._raw(CTL_LF)
                     self._raw(TXT_ALIGN[VALUE])
                 elif NAME == 'HT':
                     print "HT FOUND! ",VALUE
@@ -56,6 +71,7 @@ class HTMLtoPOS(HTMLParser):
 #                            self._raw(chr(int(VALUE)*count))
                         self._raw(NUL)
                 elif NAME == 'PD':
+                    self.txt['PD']=VALUE
 		    if VALUE == '0':
 			self._raw(PD_N50)
 		    elif VALUE == '1':
@@ -77,6 +93,7 @@ class HTMLtoPOS(HTMLParser):
 		    else:# DEFAULT: DOES NOTHING
 			pass
                 elif NAME == 'LS':
+                    self.txt['LS']=VALUE
                     if VALUE == '1/6':
                         self._raw(TXT_16LSP)
                     elif VALUE == '1/8':
@@ -85,10 +102,12 @@ class HTMLtoPOS(HTMLParser):
                         self._raw(TXT_LSP)
                         self._raw(pack('B',int(VALUE)))
                 elif NAME == 'LMARGIN':
+                    self.txt['LMARGIN']=VALUE
                     if VALUE != '':
                         self._raw(TXT_LMARGIN)
                         self._raw(pack('<h', int(VALUE)))
                 elif NAME == 'PWIDTH':
+                    self.txt['PWIDTH']=VALUE
                     if VALUE != '':
                         self._raw(TXT_PWIDTH)
                         self._raw(pack('<h', int(VALUE)))
